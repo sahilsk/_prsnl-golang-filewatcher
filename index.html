@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title> File Watcher example </title>
+        <style>
+            body {
+                background: mediumpurple;
+                margin: 50 auto;
+            }
+            div {
+                text-align: center;
+            }
+            h1{
+                color: rgba(57, 0, 128, 0.57);
+                text-align: center;
+            }
+            textarea {
+              background: lightyellow;
+                margin: 50 auto;
+                height: 80%;
+                width: 50%;
+                min-height: 300px;
+                min-width: 400px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1> Watching : {{ .Title }} </h1>
+        <div>
+            <textarea id="filecontent" disabled>
+            </textarea>
+            <div>
+                <span id="fileModDate"> </span>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+             var ws = new WebSocket("ws://localhost:8080/ws");
+             var contentArea = document.getElementById("filecontent")
+             var fileModArea= document.getElementById("fileModDate")
+             ws.onmessage = function(event){
+                 console.log(event.data);
+                 fData = JSON.parse( event.data );
+                 contentArea.textContent = atob(fData.FileContent);
+                 fileModArea.textContent = fData.Lastmodified;
+             }
+            console.log("hello");
+        </script>
+    </body>
+</html>
